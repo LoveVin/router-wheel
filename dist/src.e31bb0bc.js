@@ -120,13 +120,13 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"index.js":[function(require,module,exports) {
 var app = document.querySelector('#app');
 var div1 = document.createElement('div');
-div1.innerHTML = "\n    <br/>\n    \u6211\u662F\u7B2C1\u4E2A\u9875\u9762\u7684\u5185\u5BB9\uFF0C\u6211\u6709\u4E24\u4E2A\u8DEF\u7531\n    <a href=\"#1/1\">\u67E5\u770B1.1\u9875\u9762</a>\n    <a href=\"#1/2\">\u67E5\u770B1.2\u9875\u9762</a>\n";
+div1.innerHTML = "\n    <br/>\n    \u6211\u662F\u7B2C1\u4E2A\u9875\u9762\u7684\u5185\u5BB9\uFF0C\u6211\u6709\u4E24\u4E2A\u8DEF\u7531\n    <a class=\"link\" href=\"/1/1\">\u67E5\u770B1.1\u9875\u9762</a>\n    <a class=\"link\" href=\"/1/2\">\u67E5\u770B1.2\u9875\u9762</a>\n";
 var div11 = document.createElement('div');
 div11.innerHTML = '我是1.1页面的内容';
 var div12 = document.createElement('div');
 div12.innerHTML = '我是1.2页面的内容';
 var div2 = document.createElement('div');
-div2.innerHTML = "\n    <br/>\n    \u6211\u662F\u7B2C2\u4E2A\u9875\u9762\u7684\u5185\u5BB9\uFF0C\u6211\u6709\u4E24\u4E2A\u8DEF\u7531\n    <a href=\"#2/1\">\u67E5\u770B2.1\u9875\u9762</a>\n    <a href=\"#2/2\">\u67E5\u770B2.2\u9875\u9762</a>\n    ";
+div2.innerHTML = "\n    <br/>\n    \u6211\u662F\u7B2C2\u4E2A\u9875\u9762\u7684\u5185\u5BB9\uFF0C\u6211\u6709\u4E24\u4E2A\u8DEF\u7531\n    <a class=\"link\" href=\"/2/1\">\u67E5\u770B2.1\u9875\u9762</a>\n    <a class=\"link\" href=\"/2/2\">\u67E5\u770B2.2\u9875\u9762</a>\n    ";
 var div21 = document.createElement('div');
 div21.innerHTML = '我是2.1页面的内容';
 var div22 = document.createElement('div');
@@ -155,8 +155,8 @@ var hashTable = {
 }; //不同的层数对应不同的 routeTable
 
 function route(table) {
-  var hash = window.location.hash.substr(1) || '1';
-  var div = table[hash];
+  var pathname = window.location.pathname.substr(1) || '1';
+  var div = table[pathname];
 
   if (!div) {
     div = div404;
@@ -166,13 +166,24 @@ function route(table) {
   app.appendChild(div);
 }
 
-route(routeTable);
-window.addEventListener('hashchange', function () {
-  var hash = window.location.hash.substr(1) || '1';
-  var hashArray = hash.split('/');
-  var table = hashTable[hashArray.length];
-  route(table);
+document.body.addEventListener('click', function (e) {
+  e.preventDefault();
+  var el = e.target;
+
+  if (el.tagName === 'A' && el.matches('.link')) {
+    var href = el.getAttribute('href');
+    window.history.pushState(null, '', href);
+    onStateChange();
+  }
 });
+route(routeTable);
+
+function onStateChange() {
+  var pathname = window.location.pathname.substr(1) || '1';
+  var pathArray = pathname.split('/');
+  var table = hashTable[pathArray.length];
+  route(table);
+}
 },{}],"C:/Users/Administrator/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -201,7 +212,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "22831" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40040" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

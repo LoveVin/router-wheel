@@ -4,8 +4,8 @@ const div1 = document.createElement('div')
 div1.innerHTML = `
     <br/>
     我是第1个页面的内容，我有两个路由
-    <a href="#1/1">查看1.1页面</a>
-    <a href="#1/2">查看1.2页面</a>
+    <a class="link" href="/1/1">查看1.1页面</a>
+    <a class="link" href="/1/2">查看1.2页面</a>
 `
 const div11 = document.createElement('div')
 div11.innerHTML = '我是1.1页面的内容'
@@ -16,8 +16,8 @@ const div2 = document.createElement('div')
 div2.innerHTML = `
     <br/>
     我是第2个页面的内容，我有两个路由
-    <a href="#2/1">查看2.1页面</a>
-    <a href="#2/2">查看2.2页面</a>
+    <a class="link" href="/2/1">查看2.1页面</a>
+    <a class="link" href="/2/2">查看2.2页面</a>
     `
 const div21 = document.createElement('div')
 div21.innerHTML = '我是2.1页面的内容'
@@ -53,8 +53,8 @@ const hashTable = {
 }//不同的层数对应不同的 routeTable
 
 function route(table){
-    const hash = window.location.hash.substr(1) || '1'
-    let div = table[hash]
+    const pathname = window.location.pathname.substr(1) || '1'
+    let div = table[pathname]
 
     if(!div){
         div = div404
@@ -64,11 +64,22 @@ function route(table){
     app.appendChild(div)
 }
 
+document.body.addEventListener('click', (e)=>{
+    e.preventDefault()
+    const el = e.target
+    if(el.tagName === 'A' && el.matches('.link')){
+        const href = el.getAttribute('href')
+        window.history.pushState(null, '', href)
+        onStateChange()
+    }
+})
+
 route(routeTable)
 
-window.addEventListener('hashchange',()=>{
-    const hash = window.location.hash.substr(1) || '1'
-    const hashArray = hash.split('/')
-    const table = hashTable[hashArray.length]
+function onStateChange(){
+    const pathname = window.location.pathname.substr(1) || '1'
+    const pathArray = pathname.split('/')
+    const table = hashTable[pathArray.length]
     route(table)
-})
+}
+
