@@ -155,7 +155,8 @@ var hashTable = {
 }; //不同的层数对应不同的 routeTable
 
 function route(table) {
-  var pathname = window.location.pathname.substr(1) || '1';
+  //const pathname = window.location.pathname.substr(1) || '1'
+  var pathname = window.localStorage.getItem('url') || '1';
   var div = table[pathname];
 
   if (!div) {
@@ -171,8 +172,9 @@ document.body.addEventListener('click', function (e) {
   var el = e.target;
 
   if (el.tagName === 'A' && el.matches('.link')) {
-    var href = el.getAttribute('href');
-    window.history.pushState(null, '', href);
+    var href = el.getAttribute('href'); //window.history.pushState(null, '', href)
+
+    window.localStorage.setItem('url', href.substr(1));
     onStateChange();
   }
 });

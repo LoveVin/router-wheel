@@ -53,7 +53,8 @@ const hashTable = {
 }//不同的层数对应不同的 routeTable
 
 function route(table){
-    const pathname = window.location.pathname.substr(1) || '1'
+    //const pathname = window.location.pathname.substr(1) || '1'
+    const pathname = window.localStorage.getItem('url') || '1'
     let div = table[pathname]
 
     if(!div){
@@ -69,7 +70,8 @@ document.body.addEventListener('click', (e)=>{
     const el = e.target
     if(el.tagName === 'A' && el.matches('.link')){
         const href = el.getAttribute('href')
-        window.history.pushState(null, '', href)
+        //window.history.pushState(null, '', href)
+        window.localStorage.setItem('url', href.substr(1))
         onStateChange()
     }
 })
